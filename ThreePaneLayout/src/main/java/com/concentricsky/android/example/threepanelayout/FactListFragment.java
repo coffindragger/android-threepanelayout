@@ -1,10 +1,16 @@
 package com.concentricsky.android.example.threepanelayout;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 /**
  * Created by wiggins on 9/12/13.
@@ -15,6 +21,12 @@ public class FactListFragment extends android.support.v4.app.ListFragment
     private FactClickListener mFactClickListener;
     private String[] mPlanetNames;
     private int mPosition;
+
+    public void setLayoutWidth(int width) {
+        ListView lv = getListView();
+        if (lv != null)
+            lv.setLayoutParams(new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.MATCH_PARENT));
+    }
 
     public interface FactClickListener
     {
@@ -36,6 +48,11 @@ public class FactListFragment extends android.support.v4.app.ListFragment
         return fragment;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.list_fragment, container, false);
+        return v;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

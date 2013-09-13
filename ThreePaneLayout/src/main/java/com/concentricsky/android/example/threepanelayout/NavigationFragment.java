@@ -4,7 +4,9 @@ package com.concentricsky.android.example.threepanelayout;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,7 +28,11 @@ public class NavigationFragment extends ListFragment
         mNavigationListener = listener;
     }
 
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.navigation_fragment, container, false);
+        return v;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)

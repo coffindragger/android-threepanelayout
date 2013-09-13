@@ -11,17 +11,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity
                           implements    NavigationFragment.NavigationListener,
-                                        FactListFragment.FactClickListener
-{
+                                        FactListFragment.FactClickListener, FragmentManager.OnBackStackChangedListener {
 
     private boolean mIsTabletLayout;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,9 @@ public class MainActivity extends FragmentActivity
 
         mNavigationFragment = new NavigationFragment();
 
+
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.addOnBackStackChangedListener(this);
 
         //initialize back stack
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -97,6 +101,8 @@ public class MainActivity extends FragmentActivity
         FragmentTransaction trans = manager.beginTransaction();
         FactDetailFragment frag = FactDetailFragment.newInstance(fact);
         if (mIsTabletLayout) {
+            FactListFragment listFragment = (FactListFragment) manager.findFragmentById(R.id.list_frame);
+            listFragment.setLayoutWidth(300);
             trans.replace(R.id.detail_frame, frag, "FactDetail");
             trans.hide(mNavigationFragment);
 
@@ -105,6 +111,18 @@ public class MainActivity extends FragmentActivity
         }
         trans.addToBackStack(null);
         trans.commit();
+
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        if (mIsTabletLayout) {
+            FactListFragment list_fragment = (FactListFragment) mFragmentManager.findFragmentById(R.id.list_frame);
+            Fragment detail_fragment = mFragmentManager.findFragmentById(R.id.detail_frame);
+            if (detail_fragment == null && list_fragment != null) {
+                list_fragment.setLayoutWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+            }
+        }
 
     }
 }
