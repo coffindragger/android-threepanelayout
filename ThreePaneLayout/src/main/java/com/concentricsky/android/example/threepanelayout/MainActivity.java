@@ -56,18 +56,24 @@ public class MainActivity extends FragmentActivity
         FragmentTransaction trans = fragmentManager.beginTransaction();
         FactListFragment frag = FactListFragment.newInstance(0);
         trans.replace(R.id.navigation_frame, mNavigationFragment);
-        trans.replace(R.id.list_frame, frag);
+        trans.replace(R.id.list_frame, frag, "Home");
         trans.commit();
 
     }
 
     public void showFactsForPlanet(int pos) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction trans = fragmentManager.beginTransaction();
-        FactListFragment frag = FactListFragment.newInstance(pos);
-        trans.replace(R.id.list_frame, frag, "FactList");
-        trans.addToBackStack(null);
-        trans.commit();
+
+        FactListFragment frag = (FactListFragment) fragmentManager.findFragmentByTag("FactList");
+        if (frag == null) { //only add to backstack if there isnt one yet.
+            FragmentTransaction trans = fragmentManager.beginTransaction();
+            frag = FactListFragment.newInstance(pos);
+            trans.replace(R.id.list_frame, frag, "FactList");
+            trans.addToBackStack(null);
+            trans.commit();
+        } else {
+            frag.setPlanet(pos);
+        }
     }
 
     @Override
