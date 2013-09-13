@@ -16,38 +16,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity
+                          implements NavigationFragment.NavigationListener
+{
 
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
     private boolean mIsTablet;
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ArrayAdapter<String> mNavigationAdapter;
+    private NavigationFragment mNavigationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-
-        mNavigationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.planets_array));
-        mDrawerList = (ListView) findViewById(R.id.navigation_list);
-        mDrawerList.setAdapter(mNavigationAdapter);
-        mDrawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                showFactsForPlanet(i);
-                if (mDrawerLayout != null) {
-                    mDrawerLayout.closeDrawers();
-                }
-            }
-        });
-
-
-
-
-
         if (mDrawerLayout == null) {
             mIsTablet = true;
         } else {
@@ -61,11 +46,15 @@ public class MainActivity extends FragmentActivity {
             ab.setHomeButtonEnabled(true);
         }
 
+        mNavigationFragment = new NavigationFragment();
 
+
+        //initialize back stack
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
         FactListFragment frag = new FactListFragment();
         frag.setPlanet(0);
+        trans.replace(R.id.navigation_frame, mNavigationFragment);
         trans.replace(R.id.list_frame, frag);
         trans.commit();
 
@@ -96,5 +85,13 @@ public class MainActivity extends FragmentActivity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-    
+
+
+    @Override
+    public void onNavigationItemClicked(ListView l, View v, int position, long id) {
+        showFactsForPlanet(position);
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawers();
+        }
+    }
 }

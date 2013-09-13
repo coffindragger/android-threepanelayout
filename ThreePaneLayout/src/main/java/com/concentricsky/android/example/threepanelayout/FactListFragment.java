@@ -1,6 +1,5 @@
 package com.concentricsky.android.example.threepanelayout;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -13,13 +12,13 @@ import android.widget.ListView;
 public class FactListFragment extends android.support.v4.app.ListFragment
 {
     private int[] mFactIds;
-    private ItemClickedListener mItemClickedListener;
+    private FactClickListener mFactClickListener;
     private String[] mPlanetNames;
     private int mPosition;
 
-    public interface ItemClickedListener
+    public interface FactClickListener
     {
-        public void onItemClicked(int position, long id);
+        public void onFactClicked(int position, long id);
     }
 
     public FactListFragment() {
@@ -30,7 +29,7 @@ public class FactListFragment extends android.support.v4.app.ListFragment
         super.onActivityCreated(savedInstanceState);
         FragmentActivity activity = getActivity();
         try {
-            mItemClickedListener = (ItemClickedListener)activity;
+            mFactClickListener = (FactClickListener)activity;
         } catch (ClassCastException e) { }
 
         mFactIds = new int[] {R.array.mercury_items, R.array.venus_items, R.array.earth_items};
@@ -60,8 +59,8 @@ public class FactListFragment extends android.support.v4.app.ListFragment
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if (mItemClickedListener != null) {
-            mItemClickedListener.onItemClicked(position, id);
+        if (mFactClickListener != null) {
+            mFactClickListener.onFactClicked(position, id);
         }
     }
 }
