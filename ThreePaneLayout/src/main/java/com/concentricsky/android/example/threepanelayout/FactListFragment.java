@@ -18,15 +18,29 @@ public class FactListFragment extends android.support.v4.app.ListFragment
 
     public interface FactClickListener
     {
-        public void onFactClicked(int position, long id);
+        public void onFactClicked(String fact, int position, long id);
+    }
+    public void setFactClickListener(FactClickListener listener) {
+        mFactClickListener = listener;
     }
 
-    public FactListFragment() {
+
+    public static FactListFragment newInstance(int planet_number)
+    {
+        FactListFragment fragment = new FactListFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("planet_number", planet_number);
+        fragment.setArguments(args);
+
+        return fragment;
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         FragmentActivity activity = getActivity();
         try {
             mFactClickListener = (FactClickListener)activity;
@@ -35,7 +49,10 @@ public class FactListFragment extends android.support.v4.app.ListFragment
         mFactIds = new int[] {R.array.mercury_items, R.array.venus_items, R.array.earth_items};
         mPlanetNames = getResources().getStringArray(R.array.planets_array);
 
-        load_adapter();
+        Bundle args = getArguments();
+        if (args != null) {
+            setPlanet(args.getInt("planet_number", 0));
+        }
     }
 
     public void setPlanet(int position)
@@ -60,7 +77,8 @@ public class FactListFragment extends android.support.v4.app.ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if (mFactClickListener != null) {
-            mFactClickListener.onFactClicked(position, id);
+            String item = (String)getListAdapter().getItem(position);
+            mFactClickListener.onFactClicked(item, position, id);
         }
     }
 }

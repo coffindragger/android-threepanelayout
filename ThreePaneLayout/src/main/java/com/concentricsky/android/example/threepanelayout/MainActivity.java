@@ -1,10 +1,9 @@
 package com.concentricsky.android.example.threepanelayout;
 
 import android.app.ActionBar;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,15 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity
-                          implements NavigationFragment.NavigationListener
+                          implements    NavigationFragment.NavigationListener,
+                                        FactListFragment.FactClickListener
 {
 
-    private boolean mIsTablet;
+    private boolean mIsTabletLayout;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private NavigationFragment mNavigationFragment;
@@ -34,9 +32,9 @@ public class MainActivity extends FragmentActivity
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         if (mDrawerLayout == null) {
-            mIsTablet = true;
+            mIsTabletLayout = true;
         } else {
-            mIsTablet = false;
+            mIsTabletLayout = false;
 
             mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, android.R.string.ok, android.R.string.cancel);
             mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -52,8 +50,7 @@ public class MainActivity extends FragmentActivity
         //initialize back stack
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
-        FactListFragment frag = new FactListFragment();
-        frag.setPlanet(0);
+        FactListFragment frag = FactListFragment.newInstance(0);
         trans.replace(R.id.navigation_frame, mNavigationFragment);
         trans.replace(R.id.list_frame, frag);
         trans.commit();
@@ -63,8 +60,7 @@ public class MainActivity extends FragmentActivity
     public void showFactsForPlanet(int pos) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
-        FactListFragment frag = new FactListFragment();
-        frag.setPlanet(pos);
+        FactListFragment frag = FactListFragment.newInstance(pos);
         trans.replace(R.id.list_frame, frag, "FactList");
         trans.addToBackStack(null);
         trans.commit();
@@ -93,5 +89,22 @@ public class MainActivity extends FragmentActivity
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawers();
         }
+    }
+
+    @Override
+    public void onFactClicked(String fact, int position, long id) {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        FactDetailFragment frag = FactDetailFragment.newInstance(fact);
+        if (mIsTabletLayout) {
+            trans.replace(R.id.detail_frame, frag, "FactDetail");
+            trans.hide(mNavigationFragment);
+
+        } else {
+            trans.replace(R.id.list_frame, frag, "FactDetail");
+        }
+        trans.addToBackStack(null);
+        trans.commit();
+
     }
 }

@@ -26,6 +26,8 @@ public class NavigationFragment extends ListFragment
         mNavigationListener = listener;
     }
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
