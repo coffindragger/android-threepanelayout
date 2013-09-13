@@ -4,5 +4,30 @@
     <string name="app_name">Three Pane Layout Example</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string-array name="planets_array">
+        <item>Mercury</item>
+        <item>Venus</item>
+        <item>Earth</item>
+    </string-array>
+
+    <string-array name="mercury_items">
+        <item>Mercury makes three rotations</item>
+        <item>every two revolutions around its orbit</item>
+        <item>appears to rotate only once during two orbital revolutions.</item>
+        <item>[c] This exact ratio is maintained by a gravitational resonance. </item>
+        <item>Correspondingly, an observer on Mercury woul</item>
+    </string-array>
+
+    <string-array name="venus_items">
+        <item>Venus is the second planet from the</item>
+        <item>orbiting it every 224.7 Earth days.[</item>
+        <item>The planet is named after the Roman goddess of love and beauty</item>
+    </string-array>
+
+    <string-array name="earth_items">
+        <item>Earth is the third planet from the Sun,</item>
+        <item> densest and fifth-largest of the eight planets in the Solar System</item>
+        <item> billion years.[23] Earth\'s biosphere then significantly altered the atmospheri</item>
+    </string-array>
 
 </resources>
